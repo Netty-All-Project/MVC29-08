@@ -48,41 +48,6 @@ python -m pytest tests/test_scenarios.py -v
 | T5 | M03 ยกเลิก C03 | CANCELLED |
 | T6 | M05 APPROVE C04 | ปฏิเสธ (M05 = target ของ C04) |
 
----
-
-## โครงสร้างโปรเจกต์
-
-```
-.
-├─ seed_data.json              # ข้อมูลตั้งต้น
-├─ main.py                     # entry point
-├─ app/
-│  ├─ __init__.py              # Flask app factory
-│  ├─ models/                  # [M] Domain models + business rules
-│  │  ├─ enums.py              # Role, RequestStatus, DecisionResult
-│  │  ├─ member.py             # Member dataclass
-│  │  ├─ decision.py           # Decision dataclass
-│  │  └─ role_change_request.py # Business logic: vote, cancel, threshold
-│  ├─ services/
-│  │  └─ store.py              # In-memory store + seed loader
-│  ├─ controllers/             # [C] Flask Blueprints (orchestration)
-│  │  ├─ member_controller.py
-│  │  └─ request_controller.py
-│  └─ templates/               # [V] Jinja2 HTML templates (display only)
-│     ├─ base.html
-│     ├─ index.html
-│     ├─ members.html
-│     ├─ requests.html
-│     ├─ request_detail.html
-│     └─ create_request.html
-├─ tests/
-│  └─ test_scenarios.py        # T1–T6 sequential tests
-├─ design/
-│  ├─ class_diagram.mmd/.png
-│  └─ sequence_diagram.mmd/.png
-├─ SUBMISSION.md
-└─ README.md
-```
 
 ---
 
