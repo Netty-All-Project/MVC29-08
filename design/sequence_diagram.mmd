@@ -1,0 +1,34 @@
+sequenceDiagram
+    actor M04 as M04 (เพื่อนกันตลอดไป)
+    participant RC as RequestController
+    participant Store as Store (Service)
+    participant RCR as RoleChangeRequest C01
+    participant M02 as Member M02
+    participant View as request_detail.html
+
+    M04->>RC: POST /requests/C01/vote (result=APPROVE)
+    RC->>Store: submit_vote("M04", "C01", APPROVE)
+
+    note over Store: (1) ตรวจสิทธิ์ M04
+    Store->>Store: get_member("M04") → active=True
+    Store->>RCR: check_voter_eligible("M04")
+    RCR-->>Store: ok=True (ไม่ใช่ requester/target, ยังไม่เคยลง, PENDING)
+
+    note over RCR: (2) บันทึก Decision
+    Store->>RCR: add_decision(Decision(C01,M04,APPROVE), M02)
+    RCR->>RCR: decisions.append(Decision)
+
+    note over RCR: (3) นับ approve_count
+    RCR->>RCR: approve_count = 2 (M03+M04)
+
+    note over RCR: (4) ครบ 2 เสียง → APPROVED
+    RCR->>RCR: status = APPROVED
+
+    note over M02: (5) เปลี่ยน role M02 FINANCE→EDITOR
+    RCR->>M02: role = Role.EDITOR
+    RCR-->>Store: (True, "ครบ 2 เสียง APPROVE → อนุมัติ...")
+    Store-->>RC: (True, msg)
+
+    RC->>RC: flash(msg, "success")
+    RC->>View: redirect → request_detail C01
+    View-->>M04: แสดงสถานะ APPROVED, M02 role=EDITOR
