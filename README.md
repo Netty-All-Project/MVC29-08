@@ -15,7 +15,7 @@ pip install flask
 python main.py
 
 # 3. เปิดเบราว์เซอร์
-# http://localhost:5000
+# http://127.0.0.1:8080
 ```
 
 **การใช้งาน:**
