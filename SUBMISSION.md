@@ -31,8 +31,6 @@
 | T5 | ✅ ผ่าน | M03 cancel C03: ไม่มี decisions → C03=CANCELLED |
 | T6 | ✅ ผ่าน | ปฏิเสธ "เป้าหมายของคำขอไม่สามารถลงความเห็นได้" — M05 เป็น target_id ของ C04 |
 
-ผลรวม: **18/18 checks PASS** (รวม 6 seed-state checks)
-
 ## 4. ความแตกต่างระหว่างแบบที่ออกกับโปรแกรมจริง (ถ้ามี)
 
 1. ข้อความ flash message ใน T3 ยังแสดง `Role.EDITOR` แบบ enum repr ก่อนแก้ → แก้แล้วเป็น `EDITOR`
