@@ -1,0 +1,20 @@
+{
+  "members": [
+    {"id": "M01", "name": "คุยกันได้", "role": "PRODUCER", "active": true},
+    {"id": "M02", "name": "ใบเสร็จอยู่ไหน", "role": "FINANCE", "active": true},
+    {"id": "M03", "name": "ตัดคลิปก่อน", "role": "EDITOR", "active": true},
+    {"id": "M04", "name": "เพื่อนกันตลอดไป", "role": "CREATOR", "active": true},
+    {"id": "M05", "name": "อ่านแชตย้อนหลัง", "role": "CREATOR", "active": true}
+  ],
+  "role_change_requests": [
+    {"id": "C01", "requester_id": "M01", "target_id": "M02", "new_role": "EDITOR",  "status": "PENDING"},
+    {"id": "C02", "requester_id": "M02", "target_id": "M03", "new_role": "CREATOR", "status": "PENDING"},
+    {"id": "C03", "requester_id": "M03", "target_id": "M04", "new_role": "EDITOR",  "status": "PENDING"},
+    {"id": "C04", "requester_id": "M04", "target_id": "M05", "new_role": "PRODUCER","status": "PENDING"}
+  ],
+  "decisions": [
+    {"request_id": "C01", "member_id": "M03", "result": "APPROVE"},
+    {"request_id": "C02", "member_id": "M04", "result": "REJECT"},
+    {"request_id": "C04", "member_id": "M01", "result": "APPROVE"}
+  ]
+}
