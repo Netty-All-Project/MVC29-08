@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <h1>สรุปคำขอเปลี่ยนบทบาท</h1>
+  <a href="{{ url_for('req.create_request') }}" class="btn btn-success">+ สร้างคำขอใหม่</a>
+</div>
+
+{% for status in ["PENDING","APPROVED","REJECTED","CANCELLED"] %}
+<h2 style="margin-top:24px;">
+  <span class="badge badge-{{ status }}">{{ status }}</span>
+  ({{ grouped[status]|length }} รายการ)
+</h2>
+{% if grouped[status] %}
+<table>
+  <thead>
+    <tr><th>ID</th><th>ผู้เสนอ</th><th>เป้าหมาย</th><th>บทบาทใหม่</th><th>APPROVE</th><th>REJECT</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for r in grouped[status] %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td>{{ members[r.requester_id].name }}</td>
+      <td>{{ members[r.target_id].name }} → {{ members[r.target_id].role.value }}</td>
+      <td>{{ r.new_role.value }}</td>
+      <td>{{ r.approve_count }}</td>
+      <td>{{ r.reject_count }}</td>
+      <td><a href="{{ url_for('req.request_detail', request_id=r.id) }}" class="btn btn-primary" style="padding:4px 10px;font-size:.8em;">ดูรายละเอียด</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p style="color:#666;">ไม่มีคำขอในหมวดนี้</p>
+{% endif %}
+{% endfor %}
+{% endblock %}

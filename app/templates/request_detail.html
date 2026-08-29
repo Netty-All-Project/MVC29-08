@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('req.list_requests') }}" class="btn btn-secondary" style="margin-bottom:16px;">← กลับ</a>
+
+<div class="card">
+  <h2>คำขอ {{ req.id }} — <span class="badge badge-{{ req.status.value }}">{{ req.status.value }}</span></h2>
+  <table style="box-shadow:none;">
+    <tr><th style="width:160px;">ผู้เสนอ</th><td>{{ members[req.requester_id].name }} ({{ req.requester_id }})</td></tr>
+    <tr><th>เป้าหมาย</th><td>{{ members[req.target_id].name }} ({{ req.target_id }}) — บทบาทปัจจุบัน: {{ members[req.target_id].role.value }}</td></tr>
+    <tr><th>บทบาทใหม่</th><td>{{ req.new_role.value }}</td></tr>
+    <tr><th>APPROVE / REJECT</th><td>{{ req.approve_count }} / {{ req.reject_count }}</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>ประวัติความเห็น</h3>
+  {% if req.decisions %}
+  <table>
+    <thead><tr><th>สมาชิก</th><th>ผล</th></tr></thead>
+    <tbody>
+      {% for d in req.decisions %}
+      <tr>
+        <td>{{ members[d.member_id].name }}</td>
+        <td><span class="badge {% if d.result.value == 'APPROVE' %}badge-APPROVED{% else %}badge-REJECTED{% endif %}">{{ d.result.value }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color:#666;">ยังไม่มีความเห็น</p>
+  {% endif %}
+</div>
+
+{% if req.status.value == "PENDING" %}
+  {% if can_vote %}
+  <div class="card">
+    <h3>ลงความเห็น</h3>
+    <form method="POST" action="{{ url_for('req.vote', request_id=req.id) }}" style="display:flex;gap:12px;">
+      <button type="submit" name="result" value="APPROVE" class="btn btn-success">APPROVE อนุมัติ</button>
+      <button type="submit" name="result" value="REJECT" class="btn btn-danger">REJECT ปฏิเสธ</button>
+    </form>
+  </div>
+  {% elif actor %}
+  <div class="flash error">
+    คุณไม่มีสิทธิ์ลงความเห็นในคำขอนี้
+    {% if actor.id == req.requester_id %}(คุณเป็นผู้เสนอ)
+    {% elif actor.id == req.target_id %}(คุณเป็นเป้าหมาย)
+    {% else %}(คุณลงความเห็นไปแล้ว)
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if can_cancel %}
+  <div class="card">
+    <h3>ยกเลิกคำขอ</h3>
+    <form method="POST" action="{{ url_for('req.cancel_request', request_id=req.id) }}">
+      <button type="submit" class="btn btn-danger">ยกเลิกคำขอนี้</button>
+    </form>
+  </div>
+  {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>สร้างคำขอเปลี่ยนบทบาท</h1>
+{% if not actor %}
+<div class="flash error">กรุณาเลือกตัวตนก่อน <a href="{{ url_for('member.index') }}">คลิกที่นี่</a></div>
+{% else %}
+<div class="card">
+  <p>ผู้เสนอ: <strong>{{ actor.name }}</strong> ({{ actor.id }})</p>
+  <form method="POST">
+    <div style="margin-bottom:12px;">
+      <label><strong>เลือกเป้าหมาย:</strong></label><br>
+      <select name="target_id" required style="margin-top:6px;width:100%;max-width:300px;">
+        <option value="">-- เลือกสมาชิก --</option>
+        {% for m in members %}
+        {% if m.id != actor.id %}
+        <option value="{{ m.id }}">{{ m.name }} — {{ m.role.value }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label><strong>บทบาทใหม่:</strong></label><br>
+      <select name="new_role" required style="margin-top:6px;width:100%;max-width:300px;">
+        <option value="">-- เลือกบทบาท --</option>
+        {% for r in roles %}
+        <option value="{{ r.value }}">{{ r.value }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">สร้างคำขอ</button>
+    <a href="{{ url_for('req.list_requests') }}" class="btn btn-secondary">ยกเลิก</a>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

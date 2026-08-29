@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Friends Forever Change Request System</h1>
+
+<div class="card">
+  <h2>เลือกสมาชิกที่กำลังใช้งาน (Actor)</h2>
+  <form method="POST" action="{{ url_for('member.select_actor') }}" style="display:flex;gap:12px;align-items:center;">
+    <select name="actor_id">
+      {% for m in members %}
+      <option value="{{ m.id }}" {% if actor and m.id == actor.id %}selected{% endif %}>
+        {{ m.name }} — {{ m.role.value }}
+      </option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">เลือก</button>
+  </form>
+</div>
+
+{% if actor %}
+<div class="card">
+  <h3>ตัวตนปัจจุบัน</h3>
+  <p><strong>{{ actor.name }}</strong> | บทบาท: {{ actor.role.value }} | ID: {{ actor.id }}</p>
+  <p>
+    <a href="{{ url_for('member.list_members') }}" class="btn btn-primary">ดูรายชื่อสมาชิก</a>
+    <a href="{{ url_for('req.list_requests') }}" class="btn btn-secondary">ดูคำขอทั้งหมด</a>
+    <a href="{{ url_for('req.create_request') }}" class="btn btn-success">+ สร้างคำขอใหม่</a>
+  </p>
+</div>
+{% endif %}
+{% endblock %}
