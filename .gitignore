@@ -12,3 +12,4 @@ package-lock.json
 package.json
 *.zip
 .DS_Store
+.claude/
